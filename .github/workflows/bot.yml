@@ -1,0 +1,22 @@
+name: Kratos
+on:
+  schedule:
+    - cron: '0 */05 * * *'
+  workflow_dispatch:
+  push:
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dep
+        run: sudo apt install python -y && pip3 install Pillow && sudo pip3 install python-telegram-bot && sudo pip3 install opencv-python && sudo apt-get install tesseract-ocr -y && sudo apt-get install imagemagick && sudo pip3 install pillow && sudo pip3 install pytesseract
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bot
+        run: sudo -E python3 KratosBot
+        env:
+          BOT_KEY: ${{ secrets.BOT_KEY }}
