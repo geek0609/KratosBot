@@ -9,6 +9,7 @@ import json
 import cv2
 import pytesseract
 import numpy as np
+import logging
 
 # Only for Windows
 if os.name == 'nt':
@@ -20,6 +21,8 @@ bot = Bot(BOT_API)
 timeout = 120
 updater = Updater(BOT_API, use_context=True, workers=128)
 dispatcher = updater.dispatcher
+
+logging.basicConfig(filename="bot.log", level=logging.WARN, filemode="w+")
 
 # This contains list of words which the bot will look for
 # If the total score is equal to or greater than the TOLERANCE, then the message would be deleted
@@ -101,10 +104,10 @@ def auto_delete(message_sent, update):
 
 
 def photo_filter(update: Update, context: CallbackContext):
-    print(update.effective_message)
+    logging.debug(update.effective_message)
     picture = bot.get_file(update.effective_message.photo[-1].file_id)
     downloaded_picture = File.download(picture)
-    print(downloaded_picture)
+    logging.debug(downloaded_picture)
     img = cv2.imread(downloaded_picture)
     # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     # gray, img_bin = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
@@ -113,7 +116,7 @@ def photo_filter(update: Update, context: CallbackContext):
     # img = cv2.erode(gray, kernel, iterations=1)
     # img = cv2.dilate(img, kernel, iterations=1)
     output = pytesseract.image_to_string(img)
-    print(output)
+    logging.debug(output)
     if update.effective_chat.type == "private":
         bot.send_message(chat_id=update.effective_chat.id,
                          text="Score for this image is " + str(check_for_banned(output)),
@@ -124,9 +127,9 @@ def photo_filter(update: Update, context: CallbackContext):
     BOT_CAN_DELETE = False
     BOT_ADMIN = False
     BOT_CAN_MUTE = False
-    print("Finding out Admins....")
+    logging.debug("Finding out Admins....")
     for admin in update.effective_chat.get_administrators():
-        print(admin.user.id)
+        logging.debug(admin.user.id)
         admins.append(admin.user.id)
         if bot.id == admin.user.id:
             BOT_ADMIN = True
