@@ -114,6 +114,12 @@ def photo_filter(update: Update, context: CallbackContext):
     # img = cv2.dilate(img, kernel, iterations=1)
     output = pytesseract.image_to_string(img)
     print(output)
+    if update.effective_chat.type == "private":
+        bot.send_message(chat_id=update.effective_chat.id,
+                         text="Score for this image is " + str(check_for_banned(output)),
+                         reply_to_message_id=update.effective_message.message_id)
+        return True
+    
     admins = []
     BOT_CAN_DELETE = False
     BOT_ADMIN = False
