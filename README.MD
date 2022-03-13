@@ -21,5 +21,3 @@ And that is about it, it should automatically start doing what it needs to do.
     - Bot finds out the texts in the images using [Tesseract OCR](https://opensource.google/projects/tesseract)
     - Hosted on GitHub Actions, runs entirely there
     - Does not upload any image to anywhere else, everything is done within the GitHub actions runner and is deleted once the OCR is done.
-
-
