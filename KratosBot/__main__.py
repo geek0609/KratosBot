@@ -1,14 +1,10 @@
 import datetime
 import os
-import random
 import time
 from telegram import *
 from telegram.ext import *
-import requests
-import json
 import cv2
 import pytesseract
-import numpy as np
 import logging
 
 # Only for Windows
@@ -122,7 +118,6 @@ def photo_filter(update: Update, context: CallbackContext):
                          text="Score for this image is " + str(check_for_banned(output)),
                          reply_to_message_id=update.effective_message.message_id)
         return True
-    
     admins = []
     BOT_CAN_DELETE = False
     BOT_ADMIN = False
